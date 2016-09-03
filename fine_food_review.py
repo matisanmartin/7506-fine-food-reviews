@@ -1,37 +1,23 @@
-import getopt
-import sys
+import argparse
 
 import data_frame_processing
 import file_reading
 import utils
 
+parser = argparse.ArgmumentParser(description='Fine food reviews')
+parser.add_argument('i', '--input', help='Archivo a procesar', required=True)
+parser.add_argument('o', '--output', help='Archivo de salida', required=True)
+parser.add_argument("m", '--mode', help='Modo: train/test', required=False, default='train')
 
-def main(argv):
-    # Leo los argumentos que se pasaron por cmdline
-    try:
-        opciones, argumentos = getopt.getopt(argv, 'hi:o:', ['help', 'in=', 'out='])
-    except getopt.GetoptError:
-        print
-        'FineFodReview.py -i <infile> -o <outfile>'
-        sys.exit(2)
+args = vars(parser.parse_args())
 
-    files = {}
-    for o, a in opciones:
-        if o in ('-h', '--help'):
-            print
-            "fine_food_review.py -i <infile> -o <outfile>"
-            sys.exit()
-        elif o in ('-i', '--in'):
-            files['inputFile'] = a
-        elif o in ('-o', '--out'):
-            files['outputFile'] = a
+if args['mode'] == 'train':
+    data_frame_train = file_reading.leer_archivo(args.i, utils.header_train)
+    data_frame_processing.procesar_data_frame_train(data_frame_train)
+elif args['mode'] == 'test':
+    data_frame_test = file_reading.leer_archivo(args.i, utils.header_test)
+    data_frame_processing.procesar_data_frame_test(data_frame_test)
 
-    data_frame_train = file_reading.leer_archivo(files['inputFile'], utils.header_train)
-    data_frame_processing.procesar_data_frame(data_frame_train)
-
-
-if __name__ == '__main__':
-    main(sys.argv[1:])
 
 
 # Obtener estructuras con datos relevantes

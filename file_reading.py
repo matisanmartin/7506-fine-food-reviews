@@ -5,11 +5,21 @@ import csv
 # nombreArchivo = String con el path del archivo a leer
 # header = las columnas que posee el archivo.
 
-def leer_archivo(nombre_archivo, header):
-    with open(nombre_archivo, 'rb') as archivo:
-        # Los datos del archivo quedan en dataFrame que es un []
-        data_frame = csv.DictReader(archivo, fieldnames=header)
-        # Elimino el primer elemento del dataFrame, ya que contiene el header
-        data_frame.pop()
+def leer_archivo(nombre_archivo):
+    data_frame_vec = []
+    with open(nombre_archivo, 'rt') as archivo:
+        data_frame = csv.DictReader(archivo)
+        for frame in data_frame:
+            data_frame_vec.append(frame)
 
-    return data_frame
+    archivo.close()
+    return data_frame_vec
+
+
+def generar_archivo(data):
+    with open('submission.csv', 'wb') as outfile:
+        submission_writer = csv.writer(outfile, delimiter=',')
+        for datum in data:
+            submission_writer.writerow()
+        submission_writer.writerow(['Spam'] * 5 + ['Baked Beans'])
+        submission_writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
