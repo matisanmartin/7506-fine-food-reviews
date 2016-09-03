@@ -19,7 +19,3 @@ def leer_archivo(nombre_archivo):
 def generar_archivo(data):
     with open('submission.csv', 'wb') as outfile:
         submission_writer = csv.writer(outfile, delimiter=',')
-        for datum in data:
-            submission_writer.writerow()
-        submission_writer.writerow(['Spam'] * 5 + ['Baked Beans'])
-        submission_writer.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
