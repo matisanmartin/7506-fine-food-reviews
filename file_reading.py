@@ -17,5 +17,20 @@ def leer_archivo(nombre_archivo):
 
 
 def generar_archivo(data):
-    with open('submission.csv', 'wb') as outfile:
-        submission_writer = csv.writer(outfile, delimiter=',')
+
+    with open('submission.csv', 'w') as outfile:
+        fieldnames = ['Id', 'Prediction']
+        submission_writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        submission_writer.writeheader()
+        submission_writer.writerows(data)
+        
+    outfile.close()
+
+def test():
+
+    dict_array = [{'Id': 1, 'Prediction': 1}, {'Id': 8, 'Prediction': 3}, {'Id': 9, 'Prediction': 2.5}, {'Id': 10, 'Prediction': 4.5}]
+    generar_archivo(dict_array)
+    archivo = open("submission.csv", "r")
+    contenido = archivo.read()
+
+    print(contenido)
