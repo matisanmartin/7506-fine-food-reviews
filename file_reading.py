@@ -15,7 +15,7 @@ def leer_archivo(nombre_archivo):
     archivo.close()
     return data_frame_vec
 
-
+#Método para guardar los Id´s y Prediction´s
 def generar_archivo(data):
 
     with open('submission.csv', 'w') as outfile:
@@ -26,7 +26,9 @@ def generar_archivo(data):
         
     outfile.close()
 
-def test():
+
+#Método para testear el método "generar_archivo(data)"
+def test_generar_Archivo():
 
     dict_array = [{'Id': 1, 'Prediction': 1}, {'Id': 8, 'Prediction': 3}, {'Id': 9, 'Prediction': 2.5}, {'Id': 10, 'Prediction': 4.5}]
     generar_archivo(dict_array)
