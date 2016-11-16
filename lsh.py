@@ -123,7 +123,7 @@ def add_data_to_table_bucket(table, hash_value, d):
 # @returns:
 #   -
 def add_data_to_tables(tables, d):
-    n_vec = []
+    n_vec = []  # TODO inicializar
     hashes = get_hash_of_minhashes(d, n_vec)
     for table, hash_value in zip(tables, hashes):
         add_data_to_table_bucket(table, hash_value, d)
