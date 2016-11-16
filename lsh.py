@@ -53,9 +53,9 @@ def h_cw_str(x, n):
 #   el hash
 def h_cw_vec(x, n):
     accum = 0
-    a = [randint(1, p - 1) for _ in range(0, len(x) - 1)]
+    a = [randint(1, p - 1) for _ in range(0, len(x))]
 
-    for i in (0, len(x) - 1):
+    for i in range(0, len(x)):
         accum += a(i) * x(i)
     h = (accum % p) % n
     return h
@@ -69,7 +69,7 @@ def h_cw_vec(x, n):
 #   el vector de minhashes del dato
 def get_minhashes(d, n_vec):
     mh = []
-    for i in (0, len(n_vec) - 1):
+    for i in range(0, len(n_vec)):
         mh.append(h_cw_str(d, n_vec(i)))
     return mh
 
