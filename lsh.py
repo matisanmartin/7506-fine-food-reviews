@@ -21,8 +21,8 @@ p = 32416187567
 # @returns:
 #   el hash
 def h_cw_int(x, n):
-    a = 1
-    c = 1
+    a = randint(1, p - 1)
+    c = randint(1, p - 1)
     return (a * x + c % p) % n
 
 
@@ -33,7 +33,7 @@ def h_cw_int(x, n):
 # @returns:
 #   el hash
 def h_cw_str(x, n):
-    h = 0
+    h = 0  # TODO h = init_value
     a = randint(1, p - 1)
     for c in x:
         h = (h * a + c) % p
