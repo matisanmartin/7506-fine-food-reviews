@@ -11,7 +11,6 @@ def leer_archivo(nombre_archivo):
         data_frame = csv.DictReader(archivo)
         for frame in data_frame:
             data_frame_vec.append(frame)
-
     archivo.close()
     return data_frame_vec
 
