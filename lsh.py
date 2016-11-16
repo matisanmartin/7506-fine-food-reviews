@@ -100,3 +100,30 @@ def get_hash_of_minhashes(d, n_vec):
 #   vector de vector de minhashes
 def get_group_of_minhashes(lst, sz):
     return [lst[i:i + sz] for i in range(0, len(lst), sz)]
+
+
+# Agrega un dato a una tabla en base a su valor de hash
+# La tabla no es mas que un diccionario con (clave,valor) = (hash, lista_de_docs).
+# La clave de la tabla sería el bucket en el que cae el dato
+# @params:
+#   table: la tabla
+#   hash: el valor de la clave
+#   d: el dato
+def add_data_to_table_bucket(table, hash_value, d):
+    current_list = table[hash_value]
+    current_list.append(d)
+    table[hash_value] = current_list
+
+
+# Agrega el dato a cada tabla.
+# Se asume que el vector de hashes y el vector de tables son corespondientes
+# @params:
+#   tables: tablas
+#   hashes: los valores de los hashes
+# @returns:
+#   -
+def add_data_to_tables(tables, d):
+    n_vec = []
+    hashes = get_hash_of_minhashes(d, n_vec)
+    for table, hash_value in zip(tables, hashes):
+        add_data_to_table_bucket(table, hash_value, d)
