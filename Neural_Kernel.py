@@ -1,15 +1,22 @@
 import file_reading
 import math
 import random
+import numpy as np
+import svm
 
 def norma(v):
     return math.sqrt(sum(p * q for p, q in zip(v, v)))
+
+def kernel_polinomico(x,w):
+    c = 1
+    b = 2
+    return ((np.inner(x, w) + c) ** b)
 
 train = file_reading.leer_archivo('train.csv')
 test = file_reading.leer_archivo('test.csv')
 
 COLUMNAS = 293 #7919
-FILAS = len(train) #568454
+FILAS = 11000#len(train) #568454
 vector_Id = []
 matrix = []
 vector_Prediction = []
@@ -34,20 +41,21 @@ print(indice)
 ## Entrenamiento
 
 cantidad_ciclos = 0
-error = 1
-factor_aprendizaje = 0.001
-error_cm = 1
+factor_aprendizaje = 0.00001
+error_cm = 10
 
-while(cantidad_ciclos < 5 and error_cm > 0.5):
+while(cantidad_ciclos < 100 and error_cm > 1):
 
     cantidad_ciclos += 1
     error_c = 0
     print(cantidad_ciclos)
     for i in range(FILAS):
-        salida_obtenida = (sum(p * q for p, q in zip(matrix[i], w)))
+        error = 0
+        #salida_obtenida = sum(p * q for p, q in zip(matrix[i], w))
+        salida_obtenida = np.inner(matrix[i], w)
         error = vector_Prediction[i] - salida_obtenida
         for j in range(COLUMNAS):
-            w[j] = w[j] + (2 * factor_aprendizaje * error * matrix[i][j])
+            w[j] += 2 * factor_aprendizaje * error * matrix[i][j]
 
         error_c += error * error
 
@@ -79,16 +87,21 @@ for indice in range(FILAS2):
      matriz[indice][hash_val] = 1
 
 for j in range(FILAS2):
-    resul = sum(p * q for p, q in zip(matriz[j], w))
+    #resul = sum(p * q for p, q in zip(matriz[j], w))
+    resul = np.inner(matriz[j], w)
     mat_aux.append(resul)
 
+predicciones_svm = svm.calcular_svm()
+
 for i in range(FILAS2):
-    prediccion = mat_aux[i]
+    prediccion = (0.2 * mat_aux[i] + 0.8 * predicciones_svm[i]['Prediction'])
     salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
 
 file_reading.generar_archivo(salida_predicciones)
 matriz.clear()
 
 print('Fin test - Kernel Neuron')
+
+
 
 
