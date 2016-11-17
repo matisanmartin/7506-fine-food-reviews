@@ -53,7 +53,7 @@ def calcular_svm():
         prediccion = mat_aux[i]
         salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
 
-    file_reading.generar_archivo(salida_predicciones)
+    #file_reading.generar_archivo(salida_predicciones)
     matrix.clear()
+    return salida_predicciones
 
-print('Fin')
