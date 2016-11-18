@@ -1,4 +1,8 @@
+####################################################################################
+# Modulo con funciones de LSH
 # URL para buscar numeros primos: http://primes.utm.edu/lists/small/millions/
+####################################################################################
+
 from random import randint
 
 # numero de funciones de hash por grupo
@@ -102,19 +106,6 @@ def get_group_of_minhashes(lst, sz):
     return [lst[i:i + sz] for i in range(0, len(lst), sz)]
 
 
-# Agrega un dato a una tabla en base a su valor de hash
-# La tabla no es mas que un diccionario con (clave,valor) = (hash, lista_de_docs).
-# La clave de la tabla sería el bucket en el que cae el dato
-# @params:
-#   table: la tabla
-#   hash: el valor de la clave
-#   d: el dato
-def add_data_to_table_bucket(table, hash_value, d):
-    current_list = table[hash_value]
-    current_list.append(d)
-    table[hash_value] = current_list
-
-
 # Agrega el dato a cada tabla.
 # Se asume que el vector de hashes y el vector de tables son corespondientes
 # @params:
@@ -122,8 +113,22 @@ def add_data_to_table_bucket(table, hash_value, d):
 #   hashes: los valores de los hashes
 # @returns:
 #   -
-def add_data_to_tables(tables, d):
-    n_vec = []  # TODO inicializar
+def add_data_to_tables(tables, d, n_vec):
     hashes = get_hash_of_minhashes(d, n_vec)
     for table, hash_value in zip(tables, hashes):
-        add_data_to_table_bucket(table, hash_value, d)
+        current_list = table[hash_value]
+        current_list.append(d)
+        table[hash_value] = current_list
+
+
+# Obiene todos los documentos candidatos de todas las tablas
+# @params:
+#   minhashes: lista de minhashes del dato
+#   tables: lista de tablas
+# @returns:
+#   todos los candidatos
+def get_candidates_from_tables(minhashes, tables):
+    candidates = []
+    for table, hash_value in zip(tables, minhashes):
+        candidates.extend(table[hash_value])
+    return candidates
