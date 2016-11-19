@@ -1,6 +1,7 @@
 ####################################################################################
 # Modulo con funciones de KNN
 ####################################################################################
+import operator
 
 
 # Devuelve los k vecinos mas cercanos
@@ -13,16 +14,19 @@
 #   una lista de los k vecinos ordenada descendientemente
 def knn(test_point, data, k, distance):
     distances = []
-    test_shingles = get_shingles(test_point, 3)
+    # test_shingles = get_shingles(test_point, 3)
+
     for d in data:
-        d_shingles = get_shingles(d, 3)
-        dist = distance(test_shingles, d_shingles)
-        distances.append({d['Id'], dist})
+        # d_shingles = get_shingles(d['Text'], 3)
+        dist = distance(test_point, d['Text'])
+        distances.append({'Id': d['Id'], 'Prediction': d['Prediction'],
+                          'Distance': dist})
 
     if len(distances) < k:
         k = len(distances)
 
-    return sorted(distances, key=operator.itemgetter('Id'), reverse=True)[:k]
+    return sorted(distances, key=operator.itemgetter('Distance'), reverse=True)[:k]
+    #return sorted(distances, reverse=True)[:k]
 
 
 # Calcula el promedio de las predicciones para los k vecinos mas cercanos
@@ -33,7 +37,7 @@ def knn(test_point, data, k, distance):
 def calculate_prediction(nearest_neighbours):
     sum = 0
     for neighbour in nearest_neighbours:
-        sum += neighbour
+        sum += neighbour['Prediction']
     return float(sum) / len(nearest_neighbours)
 
 

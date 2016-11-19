@@ -122,7 +122,7 @@ def get_group_of_minhashes(lst, sz):
 # @returns:
 #   -
 def add_data_to_tables(tables, d, n_vec):
-    hashes = get_hash_of_minhashes(d, n_vec)
+    hashes = get_hash_of_minhashes(d['Text'], n_vec)
     for table, hash_value in zip(tables, hashes):
         if hash_value in table:
             current_list = table[hash_value]
