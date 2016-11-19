@@ -69,7 +69,7 @@ def jaccard_distance(s1, s2):
     set2 = get_shingles(s2, shingle_length)
     intersection = set1.intersection(set2)
     union = set1.union(set2)
-    return 1 - (float(intersection) / union)
+    return 1 - (float(len(intersection)) / len(union))
 
 
 # Implementacion de distancia Most Frequent K chars
