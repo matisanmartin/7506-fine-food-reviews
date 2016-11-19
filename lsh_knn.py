@@ -64,6 +64,6 @@ def load_test_file(test, n_vec, b):
 #   tablas
 def create_tables(b):
     tables = []
-    for i in range(0, b - 1):
+    for i in range(0, b):
         tables.append({})
     return tables

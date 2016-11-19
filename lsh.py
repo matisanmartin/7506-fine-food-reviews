@@ -3,8 +3,6 @@
 # URL para buscar numeros primos: http://primes.utm.edu/lists/small/millions/
 ####################################################################################
 
-from random import randint
-
 # numero de funciones de hash por grupo
 r = 2
 
@@ -17,6 +15,16 @@ N = r * b
 # Numero primo (ver de buscar uno mas grande)
 p = 32416187567
 
+a_cw_vec = [19178834524, 8344704755, 15698913317, 4719604898, 19883937217, 5284153007, 21023730824, 25818413334,
+            146242782, 11187741669, 11385602053, 20132032496, 2705376234, 10540204876, 31420354654, 29963935299,
+            10948069430, 15033652456, 25723612166, 31342713515]
+
+a_cw_int = 27857283472
+c_cw_int = 12422354607
+
+a_cw_str = 2562270000
+c_cw_str = 7112175649
+
 
 # Funcion de Carter-Weigman para numeros
 # @params:
@@ -25,9 +33,9 @@ p = 32416187567
 # @returns:
 #   el hash
 def h_cw_int(x, n):
-    a = randint(1, p - 1)
-    c = randint(1, p - 1)
-    return (a * x + c % p) % n
+    # a = randint(1, p - 1)
+    # c = randint(1, p - 1)
+    return (a_cw_int * x + c_cw_int % p) % n
 
 
 # Funcion de Carter-Weigman para strings
@@ -38,15 +46,15 @@ def h_cw_int(x, n):
 #   el hash
 def h_cw_str(x, n):
     h = 0  # TODO h = init_value
-    a = randint(1, p - 1)
-    for c in x:
-        h = (h * a + c) % p
+    # a = randint(1, p - 1)
+    #    for c in x:
+    #        h = (h * a_cw_str + ord(c)) % p
 
     # c = randint(1, p-1)
-    # for i in (0,len(x)-1):
-    #     h += c*(a**i)
-    # return h_cw_int(h % p, n)
-    return h
+    for i in (0, len(x) - 1):
+        h += c_cw_str * (a_cw_str ** i)
+    return h_cw_int(h % p, n)
+    #return h
 
 
 # Funcion de Carter Weigman para vectores
@@ -57,10 +65,10 @@ def h_cw_str(x, n):
 #   el hash
 def h_cw_vec(x, n):
     accum = 0
-    a = [randint(1, p - 1) for _ in range(0, len(x))]
+    #a = [randint(1, p - 1) for _ in range(0, len(x))]
 
     for i in range(0, len(x)):
-        accum += a(i) * x(i)
+        accum += a_cw_vec[i] * x[i]
     h = (accum % p) % n
     return h
 
@@ -74,7 +82,7 @@ def h_cw_vec(x, n):
 def get_minhashes(d, n_vec):
     mh = []
     for i in range(0, len(n_vec)):
-        mh.append(h_cw_str(d, n_vec(i)))
+        mh.append(h_cw_str(d, n_vec[i]))
     return mh
 
 
@@ -89,7 +97,7 @@ def get_hash_of_minhashes(d, n_vec):
     minhashes = get_minhashes(d, n_vec)
     group_of_minhashes = get_group_of_minhashes(minhashes, r)
     hashes = []
-    n = 1  # TODO cambiar
+    n = 1000  # TODO cambiar
     for group in group_of_minhashes:
         hashes.append(h_cw_vec(group, n))
     return hashes
@@ -116,9 +124,12 @@ def get_group_of_minhashes(lst, sz):
 def add_data_to_tables(tables, d, n_vec):
     hashes = get_hash_of_minhashes(d, n_vec)
     for table, hash_value in zip(tables, hashes):
-        current_list = table[hash_value]
-        current_list.append(d)
-        table[hash_value] = current_list
+        if hash_value in table:
+            current_list = table[hash_value]
+            current_list.append(d)
+            table[hash_value] = current_list
+        else:
+            table[hash_value] = [d]
 
 
 # Obiene todos los documentos candidatos de todas las tablas
