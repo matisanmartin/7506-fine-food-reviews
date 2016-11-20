@@ -35,7 +35,6 @@ def lsh_knn(d, tables, n_vec, k, distance):
     hash_values = lsh.get_hash_of_minhashes(d['Text'], n_vec)
     candidates = lsh.get_candidates_from_tables(hash_values, tables)
     k_nearest_neighbours = knn.knn(d['Text'], candidates, k, distance)
-    # candidates_prediction = [n['Prediction'] for n in k_nearest_neighbours]
     prediction = knn.calculate_prediction(k_nearest_neighbours)
     temp_result = {'Id': d['Id'], 'Prediction': prediction}
     return temp_result

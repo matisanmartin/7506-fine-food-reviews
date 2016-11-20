@@ -14,19 +14,14 @@ import operator
 #   una lista de los k vecinos ordenada descendientemente
 def knn(test_point, data, k, distance):
     distances = []
-    # test_shingles = get_shingles(test_point, 3)
-
     for d in data:
-        # d_shingles = get_shingles(d['Text'], 3)
         dist = distance(test_point, d['Text'])
         distances.append({'Id': d['Id'], 'Prediction': d['Prediction'],
                           'Distance': dist})
-
     if len(distances) < k:
         k = len(distances)
 
     return sorted(distances, key=operator.itemgetter('Distance'), reverse=True)[:k]
-    #return sorted(distances, reverse=True)[:k]
 
 
 # Calcula el promedio de las predicciones para los k vecinos mas cercanos
@@ -35,10 +30,10 @@ def knn(test_point, data, k, distance):
 # @returns:
 #   la prediccion
 def calculate_prediction(nearest_neighbours):
-    sum = 0
+    accum = 0
     for neighbour in nearest_neighbours:
-        sum += neighbour['Prediction']
-    return float(sum) / len(nearest_neighbours)
+        accum += neighbour['Prediction']
+    return float(accum) / len(nearest_neighbours)
 
 
 # Devuelve un set de shingles
@@ -51,20 +46,10 @@ def get_shingles(text, shingle_length):
     return set([text[i:i + shingle_length] for i in range(len(text) - shingle_length + 1)])
 
 
-# Implementacion de distancia de Levenshtein
-# @params:
-#   s1,s2: puntos a calcular la distancia
-# @returns:
-#   la distancia
-def levenshtein_distance(s1, s2):
-    # TODO IMPLEMENTAR
-    return ""
-
-
 # Implementacion de distancia de jaccard
 # PRE: sh1 y sh2 es un vector de shingles sin repetidos
 # @params:
-#   s1,s2: puntos a calcular la distancia
+#   s1, s2: puntos a calcular la distancia
 # @returns:
 #   la distancia
 def jaccard_distance(s1, s2):
@@ -74,13 +59,3 @@ def jaccard_distance(s1, s2):
     intersection = set1.intersection(set2)
     union = set1.union(set2)
     return 1 - (float(len(intersection)) / len(union))
-
-
-# Implementacion de distancia Most Frequent K chars
-# @params:
-#   s1,s2: puntos a calcular la distancia
-# @returns:
-#   la distancia
-def most_frequent_k_chars_distance(s1, s2):
-    # TODO IMPLEMENTAR
-    return ""
