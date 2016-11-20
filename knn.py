@@ -16,7 +16,8 @@ def knn(test_point, data, k, distance):
     distances = []
     for d in data:
         dist = distance(test_point, d['Text'])
-        distances.append({'Id': d['Id'], 'Prediction': d['Prediction'],
+        if dist > 0.6:  # Filtro falsos negativos
+            distances.append({'Id': d['Id'], 'Prediction': d['Prediction'],
                           'Distance': dist})
     if len(distances) < k:
         k = len(distances)

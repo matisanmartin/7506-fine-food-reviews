@@ -1,5 +1,7 @@
 import csv
 
+import data_frame_processing
+
 
 # Genera un arreglo donde cada elemento es un par {clave, valor}
 # nombreArchivo = String con el path del archivo a leer
@@ -10,14 +12,17 @@ def leer_archivo(nombre_archivo):
     with open(nombre_archivo, 'rt') as archivo:
         data_frame = csv.DictReader(archivo)
         for frame in data_frame:
+            result_with_no_stopwords = data_frame_processing.pre_procesar_frame(frame)
+            frame['Text'] = ''.join(result_with_no_stopwords)
+            if 'Prediction' in frame:
+                frame['Prediction'] = float(frame['Prediction'])
             data_frame_vec.append(frame)
     archivo.close()
     return data_frame_vec
 
 #Método para guardar los Id´s y Prediction´s
 def generar_archivo(data):
-
-    with open('submission.csv', 'w') as outfile:
+    with open('./kaggle/grupo16.csv', 'w') as outfile:
         fieldnames = ['Id', 'Prediction']
         submission_writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         submission_writer.writeheader()

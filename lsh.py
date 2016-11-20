@@ -4,7 +4,7 @@
 ####################################################################################
 
 # numero de funciones de hash por grupo
-r = 2
+r = 3
 
 # numero de tablas
 b = 2
@@ -74,8 +74,13 @@ def h_cw_vec(x, n):
 #   el vector de minhashes del dato
 def get_minhashes(d, n_vec):
     mh = []
+    min_hash = 10000000000000000000000000000
     for i in range(0, len(n_vec)):
-        mh.append(h_cw_str(d, n_vec[i]))
+        for c in d:
+            temp_hash = h_cw_str(c, n_vec[i])
+            if temp_hash < min_hash:
+                min_hash = temp_hash
+        mh.append(min_hash)
     return mh
 
 
@@ -134,5 +139,6 @@ def add_data_to_tables(tables, d, n_vec):
 def get_candidates_from_tables(minhashes, tables):
     candidates = []
     for table, hash_value in zip(tables, minhashes):
-        candidates.extend(table[hash_value])
+        if hash_value in table:
+            candidates.extend(table[hash_value])
     return candidates
