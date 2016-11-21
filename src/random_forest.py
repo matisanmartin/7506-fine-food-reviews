@@ -8,7 +8,7 @@ def do_random_forest(test, train):
     matrix1 = []
     vector_Prediction = []
     print("Starting Random Forest")
-    FILAS = len(train)
+    FILAS = 2000 #len(train)
     ###### Preparando los datos para tenerlo en el formato correcto-------------------------
     for i in range(FILAS):
         matrix.append([])

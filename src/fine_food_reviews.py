@@ -7,10 +7,10 @@ from src import read_and_process
 # Leo archivo
 print("Reading train.")
 # df_train_1000 = read_and_process.leer_archivo("./files/train1000lines.csv", 'train')
-df_train = read_and_process.leer_archivo("./files/train.csv", 'train')
+df_train = read_and_process.leer_archivo("../files/train.csv", 'train')
 print("Done reading train.")
 print("Reading test.")
-df_test = read_and_process.leer_archivo("./files/test.csv", 'test')
+df_test = read_and_process.leer_archivo("../files/test.csv", 'test')
 print("Done reading test.")
 print("Starting.")
 start = time.time()

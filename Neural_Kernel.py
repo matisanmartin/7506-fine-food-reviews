@@ -5,7 +5,7 @@ import read_and_process
 import svm
 
 COLUMNAS = 331  # 7919
-FILAS = 100000  # len(train) #568454
+FILAS = 100000  # len(train)
 predicciones_svm = []
 mat_aux = []
 

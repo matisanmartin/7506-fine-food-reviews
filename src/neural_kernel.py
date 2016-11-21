@@ -1,4 +1,3 @@
-import math
 import random
 
 import numpy as np
@@ -6,21 +5,15 @@ import pandas as pd
 
 from src import svm
 
-
-def norma(v):
-    return math.sqrt(sum(p * q for p, q in zip(v, v)))
-
-
 def kernel_polinomico(x, w):
     c = 1
     b = 2
-    return ((np.inner(x, w) + c) ** b)
-
+    return np.inner(x, w)
 
 def do_neural_kernel(test, train):
     print("Starting Kernel Neuron")
-    COLUMNAS = 293  # 7919
-    FILAS = 11000  # len(train) #568454
+    COLUMNAS = 331  # 7919
+    FILAS = 100000  # len(train) #568454
     vector_Id = []
     matrix = []
     vector_Prediction = []
@@ -44,12 +37,12 @@ def do_neural_kernel(test, train):
 
     ## Entrenamiento
 
-    print('Inicio Entrenamiento - Kernel Nueron')
+    print('Inicio Entrenamiento - Kernel Neuron')
     cantidad_ciclos = 0
     factor_aprendizaje = 0.00001
     error_cm = 10
 
-    while (cantidad_ciclos < 100 and error_cm > 1):
+    while (cantidad_ciclos < 10 and error_cm > 1):
         cantidad_ciclos += 1
         error_c = 0
         # print(cantidad_ciclos)
@@ -96,7 +89,7 @@ def do_neural_kernel(test, train):
     predicciones_svm = svm.calcular_svm(train, test)
 
     for i in range(FILAS2):
-        prediccion = (0.2 * mat_aux[i] + 0.8 * predicciones_svm[i]['Prediction'])
+        prediccion = (0.15 * mat_aux[i] + 0.85 * predicciones_svm[i]['Prediction'])
         salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
 
     matriz.clear()
