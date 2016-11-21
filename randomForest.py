@@ -20,7 +20,7 @@ for i in range(FILAS):
 
 for indice in range(FILAS):
         vector_Prediction.append((float(train['Prediction'][indice])))
-        texto = train['Text'][indice].split()
+        texto = read_and_process.pre_procesar_frame(train['Text'][indice])
 for j in range(len(texto)):
         hash_val = hash(texto[j]) % COLUMNAS
         matrix[indice][hash_val] += 1
@@ -48,7 +48,7 @@ for i in range(FILAS2):
 
 for indice in range(FILAS2):
         test_Id.append(test['Id'][indice])
-        texto = test['Text'][indice].split()
+        texto = read_and_process.pre_procesar_frame(test['Text'][indice])
         for j in range(len(texto)):
             hash_val = hash(texto[j]) % COLUMNAS2
             matrix1[indice][hash_val] += 1
