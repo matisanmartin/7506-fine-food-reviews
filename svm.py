@@ -1,12 +1,8 @@
 from sklearn import svm
 
-import read_and_process
-
-COLUMNAS = 331 #7919
-FILAS = 6000 #454759#len(train) #568454
-
 def calcular_svm(train, test):
-
+    COLUMNAS = 331  # 7919
+    FILAS = 6000  # 454759#len(train) #568454
     matrix = []
     vector_Prediction = []
 

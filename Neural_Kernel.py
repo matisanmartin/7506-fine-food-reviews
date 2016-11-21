@@ -85,21 +85,18 @@ def calcular_Nk():
         mat_aux.append(resul)
 
     print('Fin test - Kernel Neuron')
+    matriz.clear()
+    print('Fin - Kernel Neuron')
 
     predicciones_svm = svm.calcular_svm(train, test)
 
-
-    #for i in range(FILAS2):
-        #prediccion = (0.1 * mat_aux[i] + 0.9 * predicciones_svm[i]['Prediction'])
-        #salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
-
+    for i in range(FILAS2):
+        prediccion = (0.1 * mat_aux[i] + 0.9 * predicciones_svm[i]['Prediction'])
+        salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
     #read_and_process.generar_archivo(salida_predicciones)
-    matriz.clear()
+    return salida_predicciones
 
-    print('Fin - Kernel Neuron')
 
 def prediccion_Nk(indice):    # indice que va de 0 a len(test) NO ES EL ID!
     prediccion = (0.1 * mat_aux[indice] + 0.9 * predicciones_svm[indice]['Prediccion'])
     return prediccion
-
-
