@@ -16,8 +16,6 @@ def calcular_svm(train, test):
             matrix[i].append(0)
 
     for indice in range(FILAS):
-        #vector_Prediction.append((float(train[indice]['Prediction'])))
-        #texto = train[indice]['Text'].split()
         vector_Prediction.append(train.Prediction[indice])
         texto = train.Text[indice].split()
         for j in range(len(texto)):
@@ -41,8 +39,6 @@ def calcular_svm(train, test):
             matrix[i].append(0)
 
     for indice in range(FILAS2):
-        #test_Id.append(test[indice]['Id'])
-        #texto = test[indice]['Text'].split()
         texto = test.Text[indice].split()
         for j in range(len(texto)):
             hash_val = hash(texto[j]) % COLUMNAS2
@@ -53,6 +49,5 @@ def calcular_svm(train, test):
         prediccion = mat_aux[i]
         salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
 
-    #file_reading.generar_archivo(salida_predicciones)
     matrix.clear()
     return salida_predicciones

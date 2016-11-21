@@ -4,6 +4,11 @@ import numpy as np
 import read_and_process
 import svm
 
+COLUMNAS = 331  # 7919
+FILAS = 100000  # len(train) #568454
+predicciones_svm = []
+mat_aux = []
+
 def kernel_polinomico(x,w):
     c = 1
     b = 2
@@ -14,8 +19,6 @@ def calcular_Nk():
     test = read_and_process.leer_archivo('./files/test.csv','test')
 
     print('Se leyeron los archivos')
-    COLUMNAS = 331 #7919
-    FILAS = 100000 #len(train) #568454
     vector_Id = []
     matrix = []
     vector_Prediction = []
@@ -61,9 +64,7 @@ def calcular_Nk():
 
     ## Test
 
-    test_Id = []
     salida_predicciones = []
-    mat_aux = []
     COLUMNAS2 = COLUMNAS #7919
     FILAS2 = len(test) #568454
     matriz = []
@@ -87,15 +88,18 @@ def calcular_Nk():
 
     predicciones_svm = svm.calcular_svm(train, test)
 
-    for i in range(FILAS2):
-        prediccion = (0.1 * mat_aux[i] + 0.9 * predicciones_svm[i]['Prediction'])
-        salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
 
-    read_and_process.generar_archivo(salida_predicciones)
+    #for i in range(FILAS2):
+        #prediccion = (0.1 * mat_aux[i] + 0.9 * predicciones_svm[i]['Prediction'])
+        #salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
+
+    #read_and_process.generar_archivo(salida_predicciones)
     matriz.clear()
 
     print('Fin - Kernel Neuron')
 
-
+def prediccion_Nk(indice):    # indice que va de 0 a len(test) NO ES EL ID!
+    prediccion = (0.1 * mat_aux[indice] + 0.9 * predicciones_svm[indice]['Prediccion'])
+    return prediccion
 
 
