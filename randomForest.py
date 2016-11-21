@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
 import read_and_process
 test_Id = []
 COLUMNAS = 9
@@ -59,5 +60,5 @@ mat_aux = rf.predict(matrix1)
 for i in range(FILAS2):
         prediccion = mat_aux[i]
         salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
-
-read_and_process.generar_archivo(salida_predicciones)
+df = pd.DataFrame(salida_predicciones)
+read_and_process.generar_archivo_submission(df)
