@@ -10,8 +10,34 @@
 # Summary = Resumen del review
 # Text = Review completo
 
-header_train = ["Id", "ProductId", "UserId", "ProfileName", "HelpfulnessNumerator", "HelpfulnessDenominator",
-                "Prediction", "Time", "Summary", "Text"]
+header_train = ["Id",
+                "ProductId",
+                "UserId",
+                "ProfileName",
+                "HelpfulnessNumerator",
+                "HelpfulnessDenominator",
+                "Prediction",
+                "Time",
+                "Summary",
+                "Text"]
 
-header_test = ["Id", "ProductId", "UserId", "ProfileName", "HelpfulnessNumerator", "HelpfulnessDenominator", "Time",
-               "Summary", "Text"]
+dtypes_header_train = {"Id": 'int64',
+                       "ProductId": 'object',
+                       "UserId": 'object',
+                       "ProfileName": 'object',
+                       "HelpfulnessNumerator": 'int64',
+                       "HelpfulnessDenominator": 'int64',
+                       "Prediction": 'int64',
+                       "Time": 'int64',
+                       "Summary": 'object',
+                       "Text": 'object'}
+
+header_test = ["Id",
+               "ProductId",
+               "UserId",
+               "ProfileName",
+               "HelpfulnessNumerator",
+               "HelpfulnessDenominator",
+               "Time",
+               "Summary",
+               "Text"]

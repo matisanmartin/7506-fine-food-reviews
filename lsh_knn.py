@@ -14,12 +14,11 @@ import lsh
 #   [{'Id','Prediction'}]
 def do_lsh_knn(data, test, n_vec, k, distance, b):
     tables = load_test_file(test, n_vec, b)
-    result = []
-    for d in data:
-        temp_result = lsh_knn(d, tables, n_vec, k, distance)
-        result.append(temp_result)
-
-    return result
+    data['Prediction'] = data.apply(lambda row: lsh_knn(row['Text'], tables, n_vec, k, distance), axis=1)
+    #    for d in data:
+    #        temp_result = lsh_knn(d, tables, n_vec, k, distance)
+    #        result.append(temp_result)
+    return data
 
 
 # Funcion que realiza el proceso para un dato
@@ -32,13 +31,10 @@ def do_lsh_knn(data, test, n_vec, k, distance, b):
 # @returns:
 #   diccionario con {'Id','Prediction'}
 def lsh_knn(d, tables, n_vec, k, distance):
-    hash_values = lsh.get_hash_of_minhashes(d['Text'], n_vec)
+    hash_values = lsh.get_hash_of_minhashes(d, n_vec)
     candidates = lsh.get_candidates_from_tables(hash_values, tables)
-    k_nearest_neighbours = knn.knn(d['Text'], candidates, k, distance)
-    prediction = knn.calculate_prediction(k_nearest_neighbours)
-    temp_result = {'Id': d['Id'], 'Prediction': prediction}
-    return temp_result
-
+    k_nearest_neighbours = knn.knn(d, candidates, k, distance)
+    return knn.calculate_prediction(k_nearest_neighbours)
 
 # Funcion que carga las tablas con los datos de entrenamiento
 # @params:
@@ -48,9 +44,13 @@ def lsh_knn(d, tables, n_vec, k, distance):
 #   lista de tablas con hashes y candidatos
 def load_test_file(test, n_vec, b):
     tables = create_tables(b)
-    for t in test:
-        lsh.add_data_to_tables(tables, t, n_vec)
+    test.apply(lambda row: lsh.add_data_to_tables(tables, row, n_vec), axis=1)
     return tables
+
+
+#    for t in test:
+#        lsh.add_data_to_tables(tables, t, n_vec)
+#    return tables
 
 
 # Crea las tablas

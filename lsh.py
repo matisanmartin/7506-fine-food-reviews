@@ -2,6 +2,9 @@
 # Modulo con funciones de LSH
 # URL para buscar numeros primos: http://primes.utm.edu/lists/small/millions/
 ####################################################################################
+import numpy as np
+
+import knn
 
 # numero de funciones de hash por grupo
 r = 3
@@ -16,9 +19,10 @@ N = r * b
 p = 32416187567
 
 # Constante para Funcion de Carter-Wegman de vectores
-a_cw_vec = [19178834524, 8344704755, 15698913317, 4719604898, 19883937217, 5284153007, 21023730824, 25818413334,
-            146242782, 11187741669, 11385602053, 20132032496, 2705376234, 10540204876, 31420354654, 29963935299,
-            10948069430, 15033652456, 25723612166, 31342713515]
+a_cw_vec = np.array(
+    [19178834524, 8344704755, 15698913317, 4719604898, 19883937217, 5284153007, 21023730824, 25818413334,
+     146242782, 11187741669, 11385602053, 20132032496, 2705376234, 10540204876, 31420354654, 29963935299,
+     10948069430, 15033652456, 25723612166, 31342713515])
 
 # Constantes para Funcion de Carter-Wegman de enteros
 a_cw_int = 27857283472
@@ -46,10 +50,7 @@ def h_cw_int(x, n):
 # @returns:
 #   el hash
 def h_cw_str(x, n):
-    h = 0  # TODO h = init_value
-    for i in (0, len(x) - 1):
-        h += c_cw_str * (a_cw_str ** i)
-    return h_cw_int(h % p, n)
+    return h_cw_int(sum([ord(x[i]) * (a_cw_str ** i) for i in range(0, len(x))]) % p, n)
 
 
 # Funcion de Carter Weigman para vectores
@@ -59,11 +60,7 @@ def h_cw_str(x, n):
 # @returns:
 #   el hash
 def h_cw_vec(x, n):
-    accum = 0
-    for i in range(0, len(x)):
-        accum += a_cw_vec[i] * x[i]
-    h = (accum % p) % n
-    return h
+    return (sum([c * a for c, a in zip(x, a_cw_vec)]) % p) % n
 
 
 # Funcion que obtiene el vector de minhashes de un dato
@@ -74,13 +71,13 @@ def h_cw_vec(x, n):
 #   el vector de minhashes del dato
 def get_minhashes(d, n_vec):
     mh = []
-    min_hash = 10000000000000000000000000000
-    for i in range(0, len(n_vec)):
-        for c in d:
-            temp_hash = h_cw_str(c, n_vec[i])
-            if temp_hash < min_hash:
-                min_hash = temp_hash
-        mh.append(min_hash)
+    i = 0
+    shingles = knn.get_shingles(d, 4)
+    for n in n_vec:
+        hashes = np.array([h_cw_str(s, n) for s in shingles])
+        # np.insert(mh, [i], [hashes.min()])
+        mh.append(min(hashes))
+        i += 1
     return mh
 
 
@@ -93,22 +90,22 @@ def get_minhashes(d, n_vec):
 #   Vector con los hash de cada grupo de minhashes
 def get_hash_of_minhashes(d, n_vec):
     minhashes = get_minhashes(d, n_vec)
-    group_of_minhashes = get_group_of_minhashes(minhashes, r)
+    group_of_hashes = get_group_of_hashes(minhashes, r)
+    n = 100000  # TODO cambiar
     hashes = []
-    n = 1000  # TODO cambiar
-    for group in group_of_minhashes:
+    for group in group_of_hashes:
         hashes.append(h_cw_vec(group, n))
     return hashes
 
 
-# Divide los minhashes en grupos de r funciones
+# Divide los hashes en grupos de r funciones
 # Cortesia de: http://stackoverflow.com/questions/4119070/how-to-divide-a-list-into-n-equal-parts-python
 # @params:
-#   lst: lista con los minhashes
+#   lst: lista con los hashes
 #   sz: tamaño maximo de cada grupo
 # @returns:
 #   vector de vector de minhashes
-def get_group_of_minhashes(lst, sz):
+def get_group_of_hashes(lst, sz):
     return [lst[i:i + sz] for i in range(0, len(lst), sz)]
 
 
@@ -121,13 +118,12 @@ def get_group_of_minhashes(lst, sz):
 #   -
 def add_data_to_tables(tables, d, n_vec):
     hashes = get_hash_of_minhashes(d['Text'], n_vec)
+    temp_dict = {'Id': d['Id'], 'Text': d['Text'], 'Prediction': d['Prediction']}
     for table, hash_value in zip(tables, hashes):
-        if hash_value in table:
-            current_list = table[hash_value]
-            current_list.append(d)
-            table[hash_value] = current_list
-        else:
-            table[hash_value] = [d]
+        try:
+            table[hash_value].append(temp_dict)
+        except KeyError:
+            table[hash_value] = [temp_dict]
 
 
 # Obiene todos los documentos candidatos de todas las tablas

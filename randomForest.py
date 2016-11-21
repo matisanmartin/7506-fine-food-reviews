@@ -1,13 +1,11 @@
-import pandas as pd
-import numpy as np 
 from sklearn.ensemble import RandomForestClassifier
-from numpy import savetxt
-import csv
-import file_reading
+
+import read_and_process
+
 test_Id = []
 
-train = file_reading.leer_archivo('train.csv')
-test = file_reading.leer_archivo('test.csv')
+train = read_and_process.leer_archivo('train.csv', 'train')
+test = read_and_process.leer_archivo('test.csv', 'test')
 
 COLUMNAS = 9
 FILAS = 9
@@ -52,12 +50,10 @@ for indice in range(FILAS2):
         for j in range(len(texto)):
             hash_val = hash(texto[j]) % COLUMNAS2
             matrix1[indice][hash_val] += 1
-	print texto
+        print(texto)
 mat_aux = rf.predict(matrix1)
 for i in range(FILAS2):
         prediccion = mat_aux[i]
         salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
 
-file_reading.generar_archivo(salida_predicciones)
-
-
+read_and_process.generar_archivo(salida_predicciones)

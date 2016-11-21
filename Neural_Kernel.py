@@ -1,8 +1,11 @@
-import file_reading
 import math
 import random
+
 import numpy as np
+
+import read_and_process
 import svm
+
 
 def norma(v):
     return math.sqrt(sum(p * q for p, q in zip(v, v)))
@@ -12,11 +15,12 @@ def kernel_polinomico(x,w):
     b = 2
     return ((np.inner(x, w) + c) ** b)
 
-train = file_reading.leer_archivo('train.csv')
-test = file_reading.leer_archivo('test.csv')
+
+train = read_and_process.leer_archivo('./files/train10lines.csv')
+test = read_and_process.leer_archivo('./files/test10lines.csv')
 
 COLUMNAS = 293 #7919
-FILAS = 11000#len(train) #568454
+FILAS = len(train)  # 11000#len(train) #568454
 vector_Id = []
 matrix = []
 vector_Prediction = []
@@ -97,7 +101,7 @@ for i in range(FILAS2):
     prediccion = (0.2 * mat_aux[i] + 0.8 * predicciones_svm[i]['Prediction'])
     salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
 
-file_reading.generar_archivo(salida_predicciones)
+read_and_process.generar_archivo(salida_predicciones)
 matriz.clear()
 
 print('Fin test - Kernel Neuron')

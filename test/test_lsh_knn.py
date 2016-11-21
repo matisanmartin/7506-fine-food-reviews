@@ -1,12 +1,17 @@
 import knn
 import lsh_knn
+import read_and_process
 
-# Test lsh-knn
-data = [{"Id": 3, "Text": "Hola que tal"}]
-test1 = {"Id": 1, "Text": "Hola que tal", "Prediction": 4}
-test2 = {"Id": 2, "Text": "Hola que tal", "Prediction": 4}
-test = [test1, test2]
+# Cargo stopwords
+# nltk.download('stopwords');
+
+# Leo archivo
+train_frame = read_and_process.leer_archivo("../files/train10lines.csv", 'train')
+test_frame = read_and_process.leer_archivo("../files/train1line.csv", 'test')
+
 n_vec = [1000, 2000, 3000, 4000, 5000, 6000]
 k = 5
-result = lsh_knn.do_lsh_knn(data, test, n_vec, k, knn.jaccard_distance, 2)
+b = 2
+result = lsh_knn.do_lsh_knn(test_frame, train_frame, n_vec, k, knn.jaccard_distance, b)
 print(result)
+result.to_csv('../kaggle/grupo16_test.csv', columns=["Id", "Prediction"], index=False)

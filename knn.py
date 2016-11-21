@@ -13,16 +13,13 @@ import operator
 # @returns:
 #   una lista de los k vecinos ordenada descendientemente
 def knn(test_point, data, k, distance):
-    distances = []
-    for d in data:
-        dist = distance(test_point, d['Text'])
-        if dist > 0.6:  # Filtro falsos negativos
-            distances.append({'Id': d['Id'], 'Prediction': d['Prediction'],
-                          'Distance': dist})
-    if len(distances) < k:
-        k = len(distances)
-
-    return sorted(distances, key=operator.itemgetter('Distance'), reverse=True)[:k]
+    selected = k
+    dist = [{'Id': d['Id'],
+             'Prediction': d['Prediction'],
+             'Distance': distance(test_point, d['Text'])} for d in data]
+    if len(dist) < k:
+        selected = len(dist)
+    return sorted(dist, key=operator.itemgetter('Distance'), reverse=True)[:selected]
 
 
 # Calcula el promedio de las predicciones para los k vecinos mas cercanos
@@ -31,10 +28,11 @@ def knn(test_point, data, k, distance):
 # @returns:
 #   la prediccion
 def calculate_prediction(nearest_neighbours):
-    accum = 0
-    for neighbour in nearest_neighbours:
-        accum += neighbour['Prediction']
-    return float(accum) / len(nearest_neighbours)
+    # Calificacion por defecto si no hay vecinos mas cercanos
+    if len(nearest_neighbours) == 0:
+        return 5
+    prediction = float(sum([neighbour['Prediction'] for neighbour in nearest_neighbours])) / len(nearest_neighbours)
+    return prediction
 
 
 # Devuelve un set de shingles

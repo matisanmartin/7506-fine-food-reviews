@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
 # CARGAR DATASET--------------------------------------------------------------
-train = pd.read_csv('train10lines.csv')
-test = pd.read_csv('test10lines.csv')
+train = pd.read_csv('../files/train10lines.csv')
+test = pd.read_csv('../files/test10lines.csv')
 
 # TRAIN y TEST----------------------------------------------------------------
 columnas = ['Id', 'HelpfulnessNumerator', 'HelpfulnessDenominator', 'Summary', 'Text']

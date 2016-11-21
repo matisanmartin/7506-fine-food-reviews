@@ -1,11 +1,12 @@
 from sklearn import svm
-import file_reading
 
-train = file_reading.leer_archivo('train.csv')
-test = file_reading.leer_archivo('test.csv')
+import read_and_process
+
+train = read_and_process.leer_archivo('./files/train10lines.csv')
+test = read_and_process.leer_archivo('./files/test10lines.csv')
 
 COLUMNAS = 331 #7919
-FILAS = 6000 #454759#len(train) #568454
+FILAS = len(train)  # 6000 #454759#len(train) #568454
 
 def calcular_svm():
 

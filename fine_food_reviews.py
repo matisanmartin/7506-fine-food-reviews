@@ -1,17 +1,33 @@
-import file_reading
+import time
+
 import knn
 import lsh_knn
+import read_and_process
 
-train_array = file_reading.leer_archivo("train10lines.csv")
-test_array = [{"Id": 492346,
-               "Text": "I got them in a very timely manner and they're all very large and green. There seems to be an inordinate amount of the seeds that come out a weird beige color, but it still tastes great and is a much better deal than any of the Indian markets in town. Cheers to Frontier.",
-               "Prediction": 5}]
+# Cargo stopwords
+# nltk.download('stopwords');
 
-n_vec = [1000, 2000, 3000, 4000, 5000, 6000]
+# Leo archivo
+print("KNN: Reading train.")
+df_train = read_and_process.leer_archivo("./files/train10lines.csv", 'train')
+print("KNN: Done reading train")
+print("KNN: Reading test.")
+df_test = read_and_process.leer_archivo("./files/test10lines.csv", 'test')
+print("KNN: Done reading test")
+
+n_vec = [461,
+         599,
+         733,
+         827,
+         103,
+         997]
 k = 5
 b = 2
-result = lsh_knn.do_lsh_knn(test_array, train_array, n_vec, k, knn.jaccard_distance, b)
-for r in result:
-    print(r)
-
-file_reading.generar_archivo(result)
+print("KNN: Starting method. ")
+start = time.time()
+df_result = lsh_knn.do_lsh_knn(df_test, df_train, n_vec, k, knn.jaccard_distance, b)
+print(time.time() - start)
+print("KNN: Finished. ")
+print("Writing out file.")
+read_and_process.generar_archivo_submission(df_result)
+print("Finished.")
