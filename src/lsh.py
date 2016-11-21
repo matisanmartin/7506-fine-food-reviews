@@ -4,7 +4,7 @@
 ####################################################################################
 import numpy as np
 
-import knn
+from src import knn
 
 # numero de funciones de hash por grupo
 r = 3

@@ -1,5 +1,10 @@
 import knn
-import lsh
+
+from src import lsh
+
+n_vec = [461, 599, 733, 827, 103, 997]
+k = 10
+b = 5
 
 
 # Funcion que realiza el proceso para todos los datos
@@ -12,13 +17,10 @@ import lsh
 #   b: cantidad de tablas
 # @returns:
 #   [{'Id','Prediction'}]
-def do_lsh_knn(data, test, n_vec, k, distance, b):
-    tables = load_test_file(test, n_vec, b)
-    data['Prediction'] = data.apply(lambda row: lsh_knn(row['Text'], tables, n_vec, k, distance), axis=1)
-    #    for d in data:
-    #        temp_result = lsh_knn(d, tables, n_vec, k, distance)
-    #        result.append(temp_result)
-    return data
+# def do_lsh_knn(data, test):
+#    tables = load_test_file(test)
+#    data['Prediction'] = data.apply(lambda row: lsh_knn(row['Text'], tables), axis=1)
+#    return data
 
 
 # Funcion que realiza el proceso para un dato
@@ -30,11 +32,13 @@ def do_lsh_knn(data, test, n_vec, k, distance, b):
 #   distance: la distancia optima
 # @returns:
 #   diccionario con {'Id','Prediction'}
-def lsh_knn(d, tables, n_vec, k, distance):
+def do_lsh_knn(d, tables):
     hash_values = lsh.get_hash_of_minhashes(d, n_vec)
     candidates = lsh.get_candidates_from_tables(hash_values, tables)
-    k_nearest_neighbours = knn.knn(d, candidates, k, distance)
-    return knn.calculate_prediction(k_nearest_neighbours)
+    k_nearest_neighbours = knn.knn(d, candidates, k, knn.jaccard_distance)
+    prediction = knn.calculate_prediction(k_nearest_neighbours)
+    return prediction
+
 
 # Funcion que carga las tablas con los datos de entrenamiento
 # @params:
@@ -42,15 +46,10 @@ def lsh_knn(d, tables, n_vec, k, distance):
 #   b: numero de tablas
 # @returns:
 #   lista de tablas con hashes y candidatos
-def load_test_file(test, n_vec, b):
-    tables = create_tables(b)
+def load_test_file(test):
+    tables = create_tables()
     test.apply(lambda row: lsh.add_data_to_tables(tables, row, n_vec), axis=1)
     return tables
-
-
-#    for t in test:
-#        lsh.add_data_to_tables(tables, t, n_vec)
-#    return tables
 
 
 # Crea las tablas
@@ -60,7 +59,7 @@ def load_test_file(test, n_vec, b):
 #   b: numero de tablas
 # @returns:
 #   tablas
-def create_tables(b):
+def create_tables():
     tables = []
     for i in range(0, b):
         tables.append({})

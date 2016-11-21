@@ -1,6 +1,7 @@
 import knn
 import lsh_knn
-import read_and_process
+
+from src import read_and_process
 
 # Cargo stopwords
 # nltk.download('stopwords');

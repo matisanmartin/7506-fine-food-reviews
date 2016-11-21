@@ -1,7 +1,8 @@
 import operator
 
-import knn
 import lsh_knn
+
+from src import knn
 
 
 # Calcula la eficiencia de cada k

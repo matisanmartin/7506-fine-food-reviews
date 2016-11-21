@@ -1,7 +1,8 @@
 import argparse
 
-import read_and_process
 import utils
+
+from src import read_and_process
 
 parser = argparse.ArgmumentParser(description='Fine food reviews')
 parser.add_argument('i', '--input', help='Archivo a procesar', required=True)

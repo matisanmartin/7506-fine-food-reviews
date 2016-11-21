@@ -1,8 +1,3 @@
-from sklearn.ensemble import RandomForestClassifier 
-import pandas as pd
-from numpy import savetxt
-import numpy as np
-import matplotlib.pyplot as plt
 
 # CARGAR DATASET -----------------------------------------------------------------
 train = pd.read_csv('train10lines.csv')

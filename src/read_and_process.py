@@ -1,4 +1,3 @@
-import csv
 import string
 
 import pandas as pd
@@ -18,7 +17,7 @@ def leer_archivo(nombre_archivo, mode):
     data_frame = pd.DataFrame(data=raw_data)
 
     # Pre procesamiento
-    # data_frame['Text'] = data_frame['Text'].map(lambda x: pre_procesar_frame(x))
+    data_frame['Text'] = data_frame['Text'].map(lambda x: pre_procesar_frame(x))
 
     # Conversion a dict list
     # frame_list = data_frame.to_dict('records')
@@ -27,30 +26,8 @@ def leer_archivo(nombre_archivo, mode):
     return data_frame
 
 
-# Método para guardar los Id´s y Prediction´s
-def generar_archivo(data):
-    with open('./kaggle/grupo16.csv', 'w') as outfile:
-        fieldnames = ['Id', 'Prediction']
-        submission_writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        submission_writer.writeheader()
-        submission_writer.writerows(data)
-
-    outfile.close()
-
-
 def generar_archivo_submission(df):
     df.to_csv('./kaggle/grupo16.csv', columns=["Id", "Prediction"], index=False)
-
-
-# Método para testear el método "generar_archivo(data)"
-def test_generar_Archivo():
-    dict_array = [{'Id': 1, 'Prediction': 1}, {'Id': 8, 'Prediction': 3}, {'Id': 9, 'Prediction': 2.5},
-                  {'Id': 10, 'Prediction': 4.5}]
-    generar_archivo(dict_array)
-    archivo = open("submission.csv", "r")
-    contenido = archivo.read()
-
-    print(contenido)
 
 
 # Pre procesa un frame

@@ -1,4 +1,4 @@
-import knn
+from src import knn
 
 # Prueba distancia Jaccard 0
 text = "Hola que tal"
