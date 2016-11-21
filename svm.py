@@ -2,13 +2,10 @@ from sklearn import svm
 
 import read_and_process
 
-train = read_and_process.leer_archivo('./files/train10lines.csv')
-test = read_and_process.leer_archivo('./files/test10lines.csv')
-
 COLUMNAS = 331 #7919
-FILAS = len(train)  # 6000 #454759#len(train) #568454
+FILAS = 6000 #454759#len(train) #568454
 
-def calcular_svm():
+def calcular_svm(train, test):
 
     matrix = []
     vector_Prediction = []
@@ -19,11 +16,13 @@ def calcular_svm():
             matrix[i].append(0)
 
     for indice in range(FILAS):
-        vector_Prediction.append((float(train[indice]['Prediction'])))
-        texto = train[indice]['Text'].split()
-    for j in range(len(texto)):
-        hash_val = hash(texto[j]) % COLUMNAS
-        matrix[indice][hash_val] += 1
+        #vector_Prediction.append((float(train[indice]['Prediction'])))
+        #texto = train[indice]['Text'].split()
+        vector_Prediction.append(train.Prediction[indice])
+        texto = train.Text[indice].split()
+        for j in range(len(texto)):
+            hash_val = hash(texto[j]) % COLUMNAS
+            matrix[indice][hash_val] += 1
 
     clf = svm.SVR()
     clf.fit(matrix, vector_Prediction)
@@ -32,7 +31,6 @@ def calcular_svm():
 
 ###### Test
 
-    test_Id = []
     salida_predicciones = []
     COLUMNAS2 = COLUMNAS #7919
     FILAS2 = len(test) #568454
@@ -43,8 +41,9 @@ def calcular_svm():
             matrix[i].append(0)
 
     for indice in range(FILAS2):
-        test_Id.append(test[indice]['Id'])
-        texto = test[indice]['Text'].split()
+        #test_Id.append(test[indice]['Id'])
+        #texto = test[indice]['Text'].split()
+        texto = test.Text[indice].split()
         for j in range(len(texto)):
             hash_val = hash(texto[j]) % COLUMNAS2
             matrix[indice][hash_val] += 1
@@ -52,9 +51,8 @@ def calcular_svm():
     mat_aux = clf.predict(matrix)
     for i in range(FILAS2):
         prediccion = mat_aux[i]
-        salida_predicciones.append({'Id': test_Id[i], 'Prediction': prediccion})
+        salida_predicciones.append({'Id': test.Id[i], 'Prediction': prediccion})
 
     #file_reading.generar_archivo(salida_predicciones)
     matrix.clear()
     return salida_predicciones
-
